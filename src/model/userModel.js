@@ -2,8 +2,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const findAll = () => {
+export const findAll = ({ skip, limit, where }) => {
   return prisma.user.findMany({
+    skip,
+    take: limit,
     select: {
       id: true,
       name: true,
@@ -12,8 +14,11 @@ export const findAll = () => {
       createdAt: true,
       updatedAt: true,
     },
+    orderBy: { createdAt: "desc" },
   });
 };
+
+export const countAll = (where) => prisma.user.count({ where });
 
 export const findById = (id) => {
   return prisma.user.findUnique({

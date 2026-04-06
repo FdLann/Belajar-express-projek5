@@ -11,6 +11,7 @@ import {
   idParamSchema,
   updateUserSchema,
 } from "../validations/userValidation.js";
+import { uploadLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 const router = Router();
 
@@ -35,6 +36,7 @@ router.delete(
 // route upload avatar yang benar
 router.patch(
   "/:id/avatar",
+  uploadLimiter,
   ownDataOnly,
   upload.single("avatar"),
   userController.uploadAvatar,

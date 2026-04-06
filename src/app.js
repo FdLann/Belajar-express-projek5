@@ -4,18 +4,19 @@ import userRoutes from "./routes/userRoute.js";
 import authRoutes from "./routes/authRoutes.js";
 import AppError from "./utils/AppError.js";
 import errorHandler from "./middlewares/errorMiddleware.js";
-import { fileURLToPath } from "url";
+
 import path from "path";
 import cookieParser from "cookie-parser";
+import { globatLimiter } from "./middlewares/rateLimitMiddleware.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.resolve();
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser()); // ← tambah ini
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads"))); // ← tambah ini
+app.use(globatLimiter);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
